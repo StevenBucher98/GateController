@@ -2,7 +2,7 @@
  * Project GateController_Sender
  * Description: Code for sending signal down to controller at gate for more physical control remotely
  * Author: Steven Bucher
- * Date: December 30 2019
+ * Date: Jan 20 2020
  */
 
 const int btn_7878 = 3;
@@ -34,7 +34,7 @@ int closeTime = 1700;
 void setup() {
   Particle.syncTime();
   Time.zone(-8);
-  
+
   pinMode(btn_7878, INPUT_PULLUP);
   pinMode(openSwitch_7878, INPUT_PULLUP);
   pinMode(closeSwitch_7878, INPUT_PULLUP);
@@ -61,9 +61,8 @@ void loop() {
   databefore_1[0] = data_1[0];
   databefore_1[1] = data_1[1];
   databefore_1[2] = data_1[2];
-  
-// Logic for 7878 Gate
 
+// Logic for 7878 Gate
   if(!digitalRead(btn_7878)){
     data[0] = 1;
     Particle.publish("gate_7878", String(data[0])+String(data[1])+String(data[2]));
@@ -77,7 +76,7 @@ void loop() {
   }else{
     data[1] = 0;
   }
-  
+
   if(!digitalRead(closeSwitch_7878)){
     data[2] = 1;
   }else{
@@ -99,7 +98,7 @@ void loop() {
   }else{
     data_1[1] = 0;
   }
-  
+
   if(!digitalRead(closeSwitch_7700)){
     data_1[2] = 1;
   }else{
@@ -118,11 +117,11 @@ void loop() {
       pub_1 = true;
     }
   }
-  
+
   delay(1000);
   if(pub){
     data7878 = String(data[0])+String(data[1])+String(data[2]);
-    Particle.publish("gate_7878", data7878);  
+    Particle.publish("gate_7878", data7878);
   }
   if(pub_1){
     data7700 = String(data_1[0]) + String(data_1[1]) + String(data_1[2]);
@@ -146,13 +145,13 @@ void loop() {
   } else {
     digitalWrite(led_7878, LOW);
   }*/
-  
+
 }
 
 
 bool checkSchedule(void){
   String hr_min = leadingZero(Time.hour()) + leadingZero(Time.minute());
-  
+
   int i_hr_min = atoi(hr_min);
   if(i_hr_min >= openTime && i_hr_min <= closeTime){
     return true;
@@ -176,7 +175,7 @@ void response_7878(const char *event, const char *data){
   } else {
     digitalWrite(led_7878, LOW);
   }
-  
+
 
 }
 
